@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="./css/danmuplayer.css">
+    <script src="http://assets.dwstatic.com/b=common/js&f=jquery-1.11.1.min.js,jquery-migrate-1.2.1.min.js&20141230"></script>
+    <!--<script src="./js/zepto.min.js"></script>-->
+    <!-- 文档参考http://www.liyawei.cn/danmuplayer/ -->
+    <script src="./js/danmuplayer.js"></script>
+    <style type="text/css">
+        #videoArea{
+            position: relative;
+            z-index: 0;
+        }
+        #video{
+            position: absolute;
+            z-index: 0;
+        }
+        #layer{
+            position: absolute;
+            z-index: 1;
+            width: 100px;
+            height: 100px;
+            background-color: coral;
+        }
+    </style>
+</head>
+<body>
+
+<div id="videoArea">
+    <div id="video"></div>
+    <div id="layer"></div>
+</div>
+
+<script>
+
+    function initPlayer(selector, args){
+        var video = $(selector);
+        var leftCmd = args.leftCmd;
+        var rightCmd = args.rightCmd;
+        var enableDanmu = args.enableDanmu;
+        delete args.leftCmd;
+        delete args.rightCmd;
+        delete args.enableDanmu;
+
+        video.danmuplayer(args);
+        $('#danmu_send_opt').text(leftCmd);
+        $('#danmu_shi_opt').text(rightCmd);
+
+        var canvas1 = $('#danmu_video_html5_api');//播放前整个屏幕布
+        var canvas2 = $('#danmu71452');//播放时整个屏幕布
+        canvas1.css({cursor: 'pointer'});
+        canvas2.css({cursor: 'pointer'}).click(function(evt){ video.find('.vjs-play-control:first').click(); });
+        $('.vjs-big-play-button').hide();//去除播放器自带按钮
+
+        enableDanmu || $('.shezhi,#danmu_text,#send_danmu').hide();//屏蔽弹幕操作
+    }
+
+    function genArgs(vid){
+
+    }
+
+    var initArgs = {
+        //以下是基本属性
+        src: 'http://w5.dwstatic.com/1/6/1514/109082-99-20150402172249.mp4',
+        width: 800,
+        height: 445,
+        //以下是弹幕属性
+        speed: 20000,
+        danmuss: {},
+        default_font_color: "#FFFFFF",
+        font_size_small: 16,
+        font_size_big:28,
+        opacity: "1",
+        top_botton_danmu_time: 6000,
+        url_to_get_danmu: "",
+        url_to_post_danmu: "",
+        //以下是附加属性
+        enableDanmu: false, //是否启用弹幕选项
+        leftCmd: '发送设置 ',
+        rightCmd: '显示'
+    };
+
+    initPlayer('#video', initArgs);
+
+    $('#danmu_video_html5_api')[0].onplay = function(){
+        alert('playing');
+    };
+    $('#danmu_video_html5_api')[0].onpause = function(){
+    };
+    //document.body.onload = function(){$('#danmu_video_html5_api')[0].play();};//自动播放，在IOS无效
+
+</script>
+
+</body>
+</html>
