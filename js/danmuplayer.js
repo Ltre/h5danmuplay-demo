@@ -1234,13 +1234,13 @@ var cyntax = {
 										 });
 						var fly_tmp_name="fly"+parseInt(heig*Math.random()).toString();	
 						$("#linshi").attr("id",fly_tmp_name);
-						$('#'+fly_tmp_name).animate({left:-$(this).width()*3,},options.speed
+						$('#'+fly_tmp_name).animate({left:-$(this).width()*3},options.speed
 							,function(){$(this).remove();}	
-						 );
+						);
 					}
 					else if ( danmus[i].position == 1){
 						var top_tmp_name="top"+parseInt(10000*Math.random()).toString();
-						$("#linshi").attr("id",top_tmp_name)
+						$("#linshi").attr("id",top_tmp_name);
 						$('#'+top_tmp_name).css({
 							"width":options.width
 							,"text-align":"center"
@@ -1493,13 +1493,13 @@ $.fn.danmu.Constructor = Danmu;
 
 			$('#danmu_send_opt').scojs_tooltip71452({
 				appendTo: '.video-js',
-				contentElem: '#tip2',
+				contentElem: '#tip2'
 			});
 
 
 			$('#danmu_shi_opt').scojs_tooltip71452({
 				appendTo: '.video-js',
-				contentElem: '#tip22',
+				contentElem: '#tip22'
 	
 			});
 
@@ -1512,7 +1512,7 @@ $.fn.danmu.Constructor = Danmu;
 				onChange: function(hsb, hex, rgb, el, bySetColor) {
 					DanmuExt.danmu_color = "#" + hex
 				}
-			}).css('background-color', '#07141e');;
+			}).css('background-color', '#07141e');
 		});
 
 	};
@@ -1557,7 +1557,7 @@ $.fn.danmu.Constructor = Danmu;
 
 
 /**
- * 此处整改，消除全局命名污染，但不改动原有的方法命名
+ * 此处整改，消除全局命名污染，但不改动作者原有SDK的方法命名
  * @since 2015-05-21
  * @author Ltre
  */
@@ -1621,13 +1621,133 @@ var DanmuExt = {
 	}
 };
 
-
-jQuery(document).ready(function() {
-	jQuery("body").keydown(function(event) {
+jQuery(document).ready(function($) {
+	$("body").keydown(function(event) {
 		if (event.which == 13) {
 			console.log("enter")
 			DanmuExt.send_danmu();
-			return false
+			return false;
 		}
 	});
 });
+
+
+
+
+/*****************************************************************************
+ *                                                                           *
+ *                                                                           *
+ * 	        以上的插件基础部分结束，以下是业务层的基础部分                      *
+ * 	        插件文档参考http://www.liyawei.cn/danmuplayer                     *
+ *                                                                           *
+ *                                                                           *
+ *****************************************************************************/
+
+!function($) {
+
+
+	window.DwDanmuPlayer = {
+
+
+		defaultArgs : {
+			//以下是基本属性
+			src: '',
+			width: 0,
+			height: 0,
+			//以下是弹幕属性
+			speed: 20000,
+			danmuss: {},
+			default_font_color: "#FFFFFF",
+			font_size_small: 16,
+			font_size_big:28,
+			opacity: "1",
+			top_botton_danmu_time: 6000,
+			url_to_get_danmu: "",
+			url_to_post_danmu: "",
+			//以下是附加属性
+			enableDanmu: false, //是否启用弹幕选项
+			leftCmd: '发送设置 ',
+			rightCmd: '显示',
+			ctrlClick: function(evt, video){
+				console.log(evt, video);
+				video.paused || alert('处于播放状态，开始统计');
+			}
+		},
+
+
+		__createPlayer : function(selector, args){
+			var $videoArea = $(selector);
+			var leftCmd = args.leftCmd;
+			var rightCmd = args.rightCmd;
+			var enableDanmu = args.enableDanmu;
+			var ctrlClick = args.ctrlClick;
+			delete args.leftCmd;
+			delete args.rightCmd;
+			delete args.enableDanmu;
+			delete args.ctrlClick;
+
+			$videoArea.danmuplayer(args);
+			$('#danmu_send_opt').text(leftCmd);
+			$('#danmu_shi_opt').text(rightCmd);
+
+			var canvas1 = $('#danmu_video_html5_api');//播放前整个屏幕布
+			var canvas2 = $('#danmu-canvas');//播放时整个屏幕布
+			canvas1.css({cursor: 'pointer'});
+			canvas2.css({cursor: 'pointer'}).click(function(evt){ $videoArea.find('.vjs-play-control:first').click(); });
+			$('.vjs-big-play-button').hide();//去除播放器自带按钮
+			this.__createCtrlLayer($videoArea, args, ctrlClick);
+
+			enableDanmu || $('.shezhi,#danmu_text,#send_danmu').hide();//是否启用弹幕选项
+		},
+
+
+		__createCtrlLayer : function($videoArea, args, ctrlClick){
+			var tpl = '<div class="ctrl-layer"><div style="width: 100px; height: 100px; background-color: #66a8cc;position: absolute; left: 200px; top: 200px;"></div></div>';
+			var video = $videoArea.find('video:first')[0];
+
+			$videoArea.children('.video-js:first').append(tpl);
+			var layer = $videoArea.find('.ctrl-layer:first');
+			layer.css({
+				position: 'absolute',
+				left: 0,
+				top: 0,
+				'z-index': 100,
+				width: args.width,
+				height: args.height,
+				cursor: 'pointer',
+				'background-color': 'transparent'
+			}).on('click', function(evt){
+				$videoArea.find('.vjs-play-control:first').click();//播放控制
+				ctrlClick(evt, video);//监听其它
+			});
+		},
+
+
+		//入口方法
+		init : function(selector, args){
+			var __this = this;
+			$.each(args, function(i, e){
+				__this.defaultArgs[i] = e;
+			});
+			this.__createPlayer(selector, this.defaultArgs);
+		},
+
+
+		//测试用例
+		testCase : function(){
+			DwDanmuPlayer.init('#video-area', {
+				src: 'http://w5.dwstatic.com/1/6/1514/109082-99-20150402172249.mp4',
+				width: 800,
+				height: 445,
+				ctrlClick: function(evt, video){
+					console.log(evt, video);
+					video.paused || alert('处于播放状态，开始统计');
+				}
+			});
+		}
+
+
+	};
+
+
+}(jQuery);

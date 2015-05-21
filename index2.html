@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./css/danmuplayer.css">
+    <script src="http://assets.dwstatic.com/b=common/js&f=jquery-1.11.1.min.js,jquery-migrate-1.2.1.min.js&20141230"></script>
+    <script src="./js/danmuplayer.js?v=4165416"></script>
+</head>
+<body>
+
+
+<div id="video-area" style="position: relative; overflow: hidden;"></div>
+
+
+<script>
+
+    DwDanmuPlayer.init('#video-area', {
+        src: 'http://w5.dwstatic.com/1/6/1514/109082-99-20150402172249.mp4',
+        width: 800,
+        height: 445,
+        ctrlClick: function(evt, video){
+            console.log(evt, video);
+            video.paused || alert('处于播放状态，开始统计');
+        }
+    });
+
+</script>
+
+</body>
+</html>

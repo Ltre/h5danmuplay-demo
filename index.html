@@ -7,17 +7,11 @@
     <script src="http://assets.dwstatic.com/b=common/js&f=jquery-1.11.1.min.js,jquery-migrate-1.2.1.min.js&20141230"></script>
     <!--<script src="./js/zepto.min.js"></script>-->
     <!-- 文档参考http://www.liyawei.cn/danmuplayer/ -->
-    <script src="./js/danmuplayer.js?v=41564654612455"></script>
-    <style type="text/css">
-        #video-area{
-            position: relative;
-            overflow: hidden;
-        }
-    </style>
+    <script src="./js/danmuplayer.js?v=fdsfsda"></script>
 </head>
 <body>
 
-<div id="video-area"></div>
+<div id="video-area" style="position: relative; overflow: hidden;"></div>
 
 <script>
 
@@ -48,6 +42,7 @@
 
     //创建与<video>同级的遮罩控制层
     function createCtrlLayer($videoArea, args, ctrlClick){
+
         var tpl = '<div class="ctrl-layer"><div style="width: 100px; height: 100px; background-color: #66a8cc;position: absolute; left: 200px; top: 200px;"></div></div>';
         var video = $videoArea.find('video:first')[0];
         $videoArea.children('.video-js:first').append(tpl);
