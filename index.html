@@ -28,7 +28,6 @@
 <body>
 
 <div id="video-area"></div>
-<div id="yyy">yyyyy</div>
 
 <script>
 
@@ -63,7 +62,6 @@
         videoArea.children('.video-js:first').append(tpl);
         var layer = videoArea.find('.ctrl-layer:first');
         layer.click(function(evt){
-            alert(123);
             videoArea.find('.vjs-play-control:first').click();//播放控制
             ctrlClick(evt);//监听其它
         });
@@ -94,19 +92,11 @@
         rightCmd: '显示',
         ctrlClick: function(evt){
             alert('开始统计');
+            console.log(evt);
         }
     };
 
     initPlayer('#video-area', initArgs);
-
-    $('#danmu_video_html5_api')[0].onplay = function(){
-        alert('playing');
-    };
-    $('#danmu_video_html5_api')[0].onpause = function(){
-    };
-    //document.body.onload = function(){$('#danmu_video_html5_api')[0].play();};//自动播放，在IOS无效
-
-    $('#yyy').click(function(){alert('uuuuuu')});
 
 </script>
 
