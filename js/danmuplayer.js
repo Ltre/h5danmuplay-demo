@@ -1510,17 +1510,10 @@ $.fn.danmu.Constructor = Danmu;
 				submit: 0,
 				color: "#ffffff",
 				onChange: function(hsb, hex, rgb, el, bySetColor) {
-					danmu_color = "#" + hex
+					DanmuExt.danmu_color = "#" + hex
 				}
 			}).css('background-color', '#07141e');;
-
-
-
 		});
-
-	
-			
-
 
 	};
 
@@ -1589,6 +1582,7 @@ var DanmuExt = {
 			});
 		}
 		var newData = { text: text, color: color, size: size, position: position, time: time, isnew: ''};
+		console.log(newData);
 		jQuery('#danmu-canvas').danmu("add_danmu", newData);
 		jQuery('#danmu_text').val('');
 	},

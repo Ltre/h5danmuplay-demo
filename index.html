@@ -22,7 +22,7 @@
 <script>
 
     function initPlayer(selector, args){
-        var videoArea = $(selector);
+        var $videoArea = $(selector);
         var leftCmd = args.leftCmd;
         var rightCmd = args.rightCmd;
         var enableDanmu = args.enableDanmu;
@@ -32,36 +32,38 @@
         delete args.enableDanmu;
         delete args.ctrlClick;
 
-        videoArea.danmuplayer(args);
+        $videoArea.danmuplayer(args);
         $('#danmu_send_opt').text(leftCmd);
         $('#danmu_shi_opt').text(rightCmd);
 
         var canvas1 = $('#danmu_video_html5_api');//播放前整个屏幕布
         var canvas2 = $('#danmu-canvas');//播放时整个屏幕布
         canvas1.css({cursor: 'pointer'});
-        canvas2.css({cursor: 'pointer'}).click(function(evt){ videoArea.find('.vjs-play-control:first').click(); });
+        canvas2.css({cursor: 'pointer'}).click(function(evt){ $videoArea.find('.vjs-play-control:first').click(); });
         $('.vjs-big-play-button').hide();//去除播放器自带按钮
-        createCtrlLayer(videoArea, args, ctrlClick);
+        createCtrlLayer($videoArea, args, ctrlClick);
 
         enableDanmu || $('.shezhi,#danmu_text,#send_danmu').hide();//是否启用弹幕选项
     }
 
     //创建与<video>同级的遮罩控制层
-    function createCtrlLayer(videoArea, args, ctrlClick){
+    function createCtrlLayer($videoArea, args, ctrlClick){
         var tpl = '<div class="ctrl-layer"><div style="width: 100px; height: 100px; background-color: #66a8cc;position: absolute; left: 200px; top: 200px;"></div></div>';
-        videoArea.children('.video-js:first').append(tpl);
-        var layer = videoArea.find('.ctrl-layer:first');
+        var video = $videoArea.find('video:first')[0];
+        $videoArea.children('.video-js:first').append(tpl);
+        var layer = $videoArea.find('.ctrl-layer:first');
         layer.css({
             position: 'absolute',
             left: 0,
             top: 0,
             'z-index': 100,
-            width: '800px',
-            height: '445px',
+            width: args.width,
+            height: args.height,
+            cursor: 'pointer',
             'background-color': 'transparent'
         }).click(function(evt){
-            videoArea.find('.vjs-play-control:first').click();//播放控制
-            ctrlClick(evt);//监听其它
+            $videoArea.find('.vjs-play-control:first').click();//播放控制
+            ctrlClick(evt, video);//监听其它
         });
     }
 
@@ -88,9 +90,9 @@
         enableDanmu: true, //是否启用弹幕选项
         leftCmd: '发送设置 ',
         rightCmd: '显示',
-        ctrlClick: function(evt){
-            alert('开始统计');
-            console.log(evt);
+        ctrlClick: function(evt, video){
+            console.log(evt, video);
+            video.paused || alert('处于播放状态，开始统计');
         }
     };
 
