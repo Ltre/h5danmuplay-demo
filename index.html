@@ -52,13 +52,13 @@
         videoArea.children('.video-js:first').append(tpl);
         var layer = videoArea.find('.ctrl-layer:first');
         layer.css({
-            position: absolute,
+            position: 'absolute',
             left: 0,
             top: 0,
             'z-index': 100,
             width: '800px',
             height: '445px',
-            'background-color': transparent
+            'background-color': 'transparent'
         }).click(function(evt){
             videoArea.find('.vjs-play-control:first').click();//播放控制
             ctrlClick(evt);//监听其它
