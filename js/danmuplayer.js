@@ -1462,7 +1462,7 @@ $.fn.danmu.Constructor = Danmu;
 
 			$("body").append("<div id='tip2' class='tipb' hidden='true'><form  id='danmu_position'>弹幕位置：<input type='radio' checked='checked'  name='danmu_position' value='0' />滚动&nbsp;&nbsp;<input type='radio' name='danmu_position' value='1' />顶端&nbsp;&nbsp;<input type='radio' name='danmu_position' value='2' />底端&nbsp;&nbsp;</form><form  id='danmu_size' >弹幕大小：<input   type='radio' checked='checked'  name='danmu_size' value='1' />大文字&nbsp;&nbsp;<input   type='radio' n name='danmu_size' value='0' />小文子&nbsp;&nbsp;</form>弹幕颜色：<br><div id='danmu_color' /></div></div><div id='tip22' class='tipb' hidden='true'>透明度：<input type='range' name='op' id='op' onchange='op()' value=100 ><br>显示弹幕:<input type='checkbox' checked='checked' id='ishide' value='is' onchange='changehide()'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;循环播放:<input type='checkbox' id='isloop' value='is' onchange='changeloop()'> </div> ");
 
-			$(".vjs-control-bar").append('<span class="shezhi " id="danmu_send_opt">(&gt;^ω^&lt;)</span>');
+			$(".vjs-control-bar").append('<span class="shezhi danmu_send_opt">(&gt;^ω^&lt;)</span>');
 			$(".vjs-control-bar").append('<input  role="botton" type="textarea" id="danmu_text" max=300 />'); // -> button 
 			$(".vjs-control-bar").append('<button  id="send_danmu" type="button" aria-live="polite" onclick="send_danmu()">发送</botton>');
 
@@ -1491,7 +1491,7 @@ $.fn.danmu.Constructor = Danmu;
 			});
 
 
-			$('#danmu_send_opt').scojs_tooltip71452({
+			$('.danmu_send_opt').scojs_tooltip71452({
 				appendTo: '.video-js',
 				contentElem: '#tip2',
 			});
@@ -1629,6 +1629,4 @@ function changehide() {
 		});
 	}
 }
-
-
 

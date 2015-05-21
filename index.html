@@ -7,54 +7,66 @@
     <script src="http://assets.dwstatic.com/b=common/js&f=jquery-1.11.1.min.js,jquery-migrate-1.2.1.min.js&20141230"></script>
     <!--<script src="./js/zepto.min.js"></script>-->
     <!-- 文档参考http://www.liyawei.cn/danmuplayer/ -->
-    <script src="./js/danmuplayer.js"></script>
+    <script src="./js/danmuplayer.js?v=41564654612455"></script>
     <style type="text/css">
-        #videoArea{
+        #video-area{
             position: relative;
-            z-index: 0;
+            overflow: hidden;
         }
-        #video{
+        .ctrl-layer{
             position: absolute;
-            z-index: 0;
-        }
-        #layer{
-            position: absolute;
-            z-index: 1;
-            width: 100px;
-            height: 100px;
-            background-color: coral;
+            left: 0;
+            top: 0;
+            z-index: 100;
+            width: 800px;
+            height: 445px;
+            background-color: transparent;
+            /*background-color: rgba(100,200,100,0.5);*/
         }
     </style>
 </head>
 <body>
 
-<div id="videoArea">
-    <div id="video"></div>
-    <div id="layer"></div>
-</div>
+<div id="video-area"></div>
+<div id="yyy">yyyyy</div>
 
 <script>
 
     function initPlayer(selector, args){
-        var video = $(selector);
+        var videoArea = $(selector);
         var leftCmd = args.leftCmd;
         var rightCmd = args.rightCmd;
         var enableDanmu = args.enableDanmu;
+        var ctrlClick = args.ctrlClick;
         delete args.leftCmd;
         delete args.rightCmd;
         delete args.enableDanmu;
+        delete args.ctrlClick;
 
-        video.danmuplayer(args);
-        $('#danmu_send_opt').text(leftCmd);
+        videoArea.danmuplayer(args);
+        videoArea.find('.danmu_send_opt:first').text(leftCmd);
         $('#danmu_shi_opt').text(rightCmd);
 
         var canvas1 = $('#danmu_video_html5_api');//播放前整个屏幕布
         var canvas2 = $('#danmu71452');//播放时整个屏幕布
         canvas1.css({cursor: 'pointer'});
-        canvas2.css({cursor: 'pointer'}).click(function(evt){ video.find('.vjs-play-control:first').click(); });
+        canvas2.css({cursor: 'pointer'}).click(function(evt){ videoArea.find('.vjs-play-control:first').click(); });
         $('.vjs-big-play-button').hide();//去除播放器自带按钮
+        createCtrlLayer(videoArea, args, ctrlClick);
 
-        enableDanmu || $('.shezhi,#danmu_text,#send_danmu').hide();//屏蔽弹幕操作
+        enableDanmu || $('.shezhi,#danmu_text,#send_danmu').hide();//是否屏蔽弹幕操作
+    }
+
+    //创建与<video>同级的遮罩控制层
+    function createCtrlLayer(videoArea, args, ctrlClick){
+        var tpl = '<div class="ctrl-layer"><div style="width: 100px; height: 100px; background-color: #66a8cc;position: absolute; left: 200px; top: 200px;"></div></div>';
+        videoArea.children('.video-js:first').append(tpl);
+        var layer = videoArea.find('.ctrl-layer:first');
+        layer.click(function(evt){
+            alert(123);
+            videoArea.find('.vjs-play-control:first').click();//播放控制
+            ctrlClick(evt);//监听其它
+        });
     }
 
     function genArgs(vid){
@@ -77,12 +89,15 @@
         url_to_get_danmu: "",
         url_to_post_danmu: "",
         //以下是附加属性
-        enableDanmu: false, //是否启用弹幕选项
+        enableDanmu: true, //是否启用弹幕选项
         leftCmd: '发送设置 ',
-        rightCmd: '显示'
+        rightCmd: '显示',
+        ctrlClick: function(evt){
+            alert('开始统计');
+        }
     };
 
-    initPlayer('#video', initArgs);
+    initPlayer('#video-area', initArgs);
 
     $('#danmu_video_html5_api')[0].onplay = function(){
         alert('playing');
@@ -90,6 +105,8 @@
     $('#danmu_video_html5_api')[0].onpause = function(){
     };
     //document.body.onload = function(){$('#danmu_video_html5_api')[0].play();};//自动播放，在IOS无效
+
+    $('#yyy').click(function(){alert('uuuuuu')});
 
 </script>
 
