@@ -1704,7 +1704,7 @@ jQuery(document).ready(function($) {
 		__createCtrlLayer : function($videoArea, args, ctrlClick){
 			var tpl = '<div class="ctrl-layer"><div style="width: 100px; height: 100px; background-color: #66a8cc;position: absolute; left: 200px; top: 200px;"></div></div>';
 			var video = $videoArea.find('video:first')[0];
-
+			delete video.controls;//禁用控制属性
 			$videoArea.children('.video-js:first').append(tpl);
 			var layer = $videoArea.find('.ctrl-layer:first');
 			layer.css({
@@ -1715,7 +1715,8 @@ jQuery(document).ready(function($) {
 				width: args.width,
 				height: args.height,
 				cursor: 'pointer',
-				'background-color': 'transparent'
+				'background-color': 'transparent',
+			    '-webkit-transform-style': 'preserve-3d'
 			}).on('click', function(evt){
 				$videoArea.find('.vjs-play-control:first').click();//播放控制
 				ctrlClick(evt, video);//监听其它
